@@ -1,0 +1,5 @@
+C:\Users\alifc\OneDrive\Desktop\Project2\uni_admission\uni_admission\bin\uni_admission.dll
+C:\Users\alifc\OneDrive\Desktop\Project2\uni_admission\uni_admission\bin\uni_admission.pdb
+C:\Users\alifc\OneDrive\Desktop\Project2\uni_admission\uni_admission\obj\Debug\uni_admission.dll
+C:\Users\alifc\OneDrive\Desktop\Project2\uni_admission\uni_admission\obj\Debug\uni_admission.pdb
+C:\Users\alifc\OneDrive\Desktop\Project2\uni_admission\uni_admission\obj\Debug\uni_admission.csprojResolveAssemblyReference.cache

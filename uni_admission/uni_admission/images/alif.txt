@@ -1,0 +1,142 @@
+//login database
+
+
+ public partial class WebForm5 : System.Web.UI.Page
+    {
+        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\users.mdf;Integrated Security=True");
+        protected void Page_Load(object sender, EventArgs e)
+        {
+             if (connect.State == ConnectionState.Open)
+            {
+                connect.Close();
+            }
+            connect.Open();
+
+            if (Session["email"] != null)
+            {
+                if (Session["pword"] != null)
+                {
+                    if (Session["email"].ToString() == "abir1607098@gmail.com" && Session["pword"].ToString() == "1607098")
+                    Response.Redirect("Home.aspx");
+                }
+            }
+            
+        }
+
+
+
+protected void ForgotPass_Click(object sender, EventArgs e)
+        {
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "select * from Users_info  where email_id='" + email.Text + "' and password='"+ pword.Text+ "'";
+
+            //cmd.ExecuteNonQuery();
+            SqlDataAdapter dal = new SqlDataAdapter(cmd);
+            DataSet ds2 = new DataSet();
+            dal.Fill(ds2);
+            int j = ds2.Tables[0].Rows.Count;
+
+
+            if (j>0)
+            {
+                // Create the cookie object
+                HttpCookie cookie = new HttpCookie("UserDetails");
+                cookie["email"] = email.Text;
+                cookie["pword"] = pword.Text;
+                // Cookie will be persisted for 30 days
+                cookie.Expires = DateTime.Now.AddDays(30);
+                // Add the cookie to the client machine
+                Response.Cookies.Add(cookie);
+                Session["email"] = email.Text;
+                Session["pword"] = pword.Text;
+                Response.Redirect("Home.aspx");
+            }
+            else
+                Response.Write("incorrect Email or Password");
+
+
+
+//home database
+
+
+        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\users.mdf;Integrated Security=True");
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (connect.State == ConnectionState.Open)
+            {
+                connect.Close();
+            }
+            connect.Open();
+
+            HttpCookie cookie = Request.Cookies["UserDetails"];
+            if (cookie != null)
+            {
+                email.Text += cookie["email"];
+                pword.Text += cookie["pword"];
+            }
+            if (Session["email"] != null)
+            {
+                semail.Text += Session["email"].ToString();
+            }
+            if (Session["pword"] != null)
+            {
+                spword.Text += Session["pword"].ToString();
+            } 
+            else
+                Response.Redirect("login.aspx");
+
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "select * from Users_info where email_id='" + Session["email"].ToString() + "'";
+            cmd.ExecuteNonQuery();
+            DataTable dt = new DataTable();
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            da.Fill(dt);
+            GridView1.DataSource = dt;
+            GridView1.DataBind();
+        }
+
+
+//signup database
+
+
+ SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\users.mdf;Integrated Security=True");
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (connect.State == ConnectionState.Open)
+            {
+                connect.Close();
+            }
+            connect.Open();
+            Response.Write("successfull");
+
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "select * from Users_info  where email_id='" + TextBox1.Text + "'";
+
+            //cmd.ExecuteNonQuery();
+            SqlDataAdapter dal = new SqlDataAdapter(cmd);
+            DataSet ds2 = new DataSet();
+            dal.Fill(ds2);
+            int j = ds2.Tables[0].Rows.Count;
+
+
+            if (j == 0)
+            {
+                cmd.CommandText = "insert into Users_info(email_id,password) values ('" + TextBox1.Text + "','" + TextBox2.Text + "')";
+
+                cmd.ExecuteNonQuery();
+            }
+            else
+            {
+                Response.Clear();
+                Response.Write("This email has been created before");
+            }
+            }
+
+
